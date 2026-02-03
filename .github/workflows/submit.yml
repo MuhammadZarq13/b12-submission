@@ -1,0 +1,22 @@
+name: Submit to B12
+
+on:
+  workflow_dispatch:
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - name: Install requests
+        run: pip install requests
+      - name: Get Run ID and Replace in Script
+        run: |
+          RUN_ID=${GITHUB_RUN_ID}
+          sed -i "s|REPLACE_WITH_RUN_ID|$RUN_ID|g" submit_to_b12.py
+      - name: Run submission script
+        run: python submit_to_b12.py
